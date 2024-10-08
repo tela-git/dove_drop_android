@@ -1,4 +1,4 @@
-package com.example.dovedrop.ui.theme
+package com.example.dovedrop.presentation.theme
 
 import android.app.Activity
 import android.os.Build
