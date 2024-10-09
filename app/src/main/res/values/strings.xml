@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Dove Drop</string>
+    <string name="onboarding_one_message">Message privately and securely</string>
+    <string name="onboarding_two_message">No statuses, no channels e.t.c.</string>
+    <string name="onboarding_two_message_tag">Only Chats and Calls</string>
 </resources>
