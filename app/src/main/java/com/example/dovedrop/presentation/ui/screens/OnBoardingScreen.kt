@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,21 +17,20 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,13 +39,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.dovedrop.R
+import com.example.dovedrop.presentation.navigation.AppScreens
+import com.example.dovedrop.presentation.viewmodel.AppAuthState
+import com.example.dovedrop.presentation.viewmodel.AuthViewModel
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel
 ) {
+    val authState by authViewModel.authState.collectAsState()
+
     var currentImage by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(authState) {
+        if(
+            authState.authState == AppAuthState.Authenticated
+        ) {
+            navController.navigate(AppScreens.ChatList.route) {
+                popUpTo(AppScreens.ChatList.route) { inclusive = false }
+            }
+        }
+    }
 
     BackHandler { if(currentImage != 0) currentImage-- }
     Column(
@@ -97,7 +111,7 @@ fun OnBoardingScreen(
                     .size(12.dp, 12.dp)
                     .background(
                         color = if(currentImage == 0) MaterialTheme.colorScheme.onPrimaryContainer else {
-                            MaterialTheme.colorScheme.onPrimary
+                            MaterialTheme.colorScheme.secondaryContainer
                         }
                     )
 
@@ -124,6 +138,10 @@ fun OnBoardingScreen(
             onClick = {
                 if(currentImage != 1) {
                     currentImage++
+                } else {
+                    navController.navigate(AppScreens.Login.route) {
+                        popUpTo(AppScreens.Login.route) { inclusive = false }
+                    }
                 }
             },
             shape = RoundedCornerShape(16.dp),
@@ -132,7 +150,7 @@ fun OnBoardingScreen(
             )
         ) {
             Text(
-                text = "NEXT",
+                text = if(currentImage==0) "NEXT" else "CONTINUE",
                 fontSize = 20.sp,
             )
         }
