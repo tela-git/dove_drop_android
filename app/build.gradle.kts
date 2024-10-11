@@ -88,7 +88,7 @@ dependencies {
 
 
     // Ktor client
-    implementation("io.ktor:ktor-client-android:3.0.0-rc-1")
+    implementation(libs.ktor.client.android.v300rc1)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

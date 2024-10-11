@@ -8,4 +8,5 @@ sealed class AppScreens(val route: String) {
     data object SignUp: AppScreens(route = "SignUp")
     data object PasswordForgot: AppScreens(route = "ForgotPassword")
     data object OnBoarding: AppScreens(route = "OnBoarding")
+    data object NoInternet: AppScreens(route = "NoInternet")
 }

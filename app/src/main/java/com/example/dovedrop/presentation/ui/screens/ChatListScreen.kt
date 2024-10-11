@@ -32,23 +32,32 @@ import io.github.jan.supabase.auth.auth
 fun ChatListScreen(
     authViewModel: AuthViewModel,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isNetworkConnected: Boolean
 ) {
     val authState by authViewModel.authState.collectAsState()
-    val auth = authViewModel.supabase.auth
+    val auth = authViewModel.supabase?.auth
     BackHandler {
         // Do nothing
     }
     LaunchedEffect(authState) {
-        if(
-            authState.authState == AppAuthState.UnAuthenticated
-        ) {
-            navController.navigate(AppScreens.OnBoarding.route) {
-                popUpTo(AppScreens.OnBoarding.route)
+        if(auth != null) {
+            if (
+                authState.authState == AppAuthState.UnAuthenticated
+            ) {
+                navController.navigate(AppScreens.OnBoarding.route) {
+                    popUpTo(AppScreens.OnBoarding.route)
+                }
             }
         }
     }
-
+    LaunchedEffect(isNetworkConnected) {
+        if(!isNetworkConnected) {
+            navController.navigate(AppScreens.NoInternet.route) {
+                popUpTo(AppScreens.NoInternet.route) { inclusive = true }
+            }
+        }
+    }
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -59,10 +68,10 @@ fun ChatListScreen(
             text = "This is ChatListScreen"
         )
         Text(
-            text = auth.currentUserOrNull()?.email ?: ""
+            text = auth?.currentUserOrNull()?.email ?: ""
         )
         Text(
-            text = auth.currentUserOrNull()?.role ?: ""
+            text = auth?.currentUserOrNull()?.role ?: ""
         )
         Spacer(Modifier.height(20.dp))
         Button(

@@ -21,11 +21,11 @@ fun LongButton(
     modifier: Modifier = Modifier,
     text: String,
     onClick: ()-> Unit,
-    isEnabled: Boolean = true
+    isEnabled: Boolean = false
 ) {
     Button(
-        modifier = Modifier
-            .padding(20.dp)
+        modifier = modifier
+            .padding(vertical = 20.dp)
             .fillMaxWidth()
             .sizeIn(minHeight = 50.dp),
         onClick = onClick,
