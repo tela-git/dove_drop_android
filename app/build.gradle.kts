@@ -1,8 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.9.25"
+    id("org.jetbrains.kotlin.android") version "1.9.25"
+
 
 }
 
@@ -21,6 +25,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "API_KEY", "\"${properties["API_KEY"]}\"")
+        buildConfigField("String","PROJECT_URL", "\"${properties["PROJECT_URL"]}\"")
     }
 
     buildTypes {
@@ -41,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
@@ -80,6 +91,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
+    // Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
     // Supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:3.0.0"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
@@ -89,6 +103,11 @@ dependencies {
 
     // Ktor client
     implementation(libs.ktor.client.android.v300rc1)
+
+    // Moshi
+    implementation("io.github.jan-tennert.supabase:serializer-moshi:3.0.0")
+    implementation("com.squareup.moshi:moshi:1.15.1")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

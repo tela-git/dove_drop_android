@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dovedrop.data.network.NetworkConnectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jan.supabase.BuildConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.auth
@@ -26,8 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
+    val supabase: SupabaseClient
 ): ViewModel() {
-    var supabase: SupabaseClient? = null
 
     private val _authState = MutableStateFlow(AuthState(AppAuthState.UnAuthenticated))
     val authState = _authState.asStateFlow()
@@ -108,25 +109,6 @@ class AuthViewModel @Inject constructor(
         _signUpUiState.update { SignUpUiState() }
     }
     init {
-        viewModelScope.launch {
-            supabase =  try { createSupabaseClient(
-                supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZueXBzYm15YWxiaHlscXhwbmtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0NTc0OTQsImV4cCI6MjA0NDAzMzQ5NH0.dvbRzv6hlKi_qU8sz3tPHkytNkKvyemyHnvzyyrEV3A",
-                supabaseUrl = "https://vnypsbmyalbhylqxpnkg.supabase.co"
-            ) {
-                defaultSerializer = KotlinXSerializer(json = Json)
-                install(Postgrest)
-                install(Auth)
-            }
-        } catch (e: HttpRequestException) {
-            Log.e("LETTER", "Error Message: ${e.message}")
-             null
-        }
-        catch (e: Exception) {
-            Log.e("LETTER", "Error Message: ${e.message}")
-           null
-        }
-        }
-
         viewModelScope.launch {
             if(supabase != null) {
                 try {
