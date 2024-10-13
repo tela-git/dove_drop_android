@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.dovedrop.data.network.NetworkConnectionState
 import com.example.dovedrop.data.network.rememberConnectivityState
 import com.example.dovedrop.presentation.navigation.AppScreens
+import com.example.dovedrop.presentation.ui.screens.ChatDetailScreen
 import com.example.dovedrop.presentation.ui.screens.ChatListScreen
 import com.example.dovedrop.presentation.ui.screens.LoginScreen
 import com.example.dovedrop.presentation.ui.screens.NoInternetScreen
@@ -93,6 +94,13 @@ fun DoveDropApp(
                     authViewModel = authViewModel,
                     navController = navController,
                     isNetworkConnected = isNetworkConnected
+                )
+            }
+            composable(
+                route = AppScreens.ChatDetail.route
+            ) {
+                ChatDetailScreen(
+
                 )
             }
 
