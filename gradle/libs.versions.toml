@@ -4,8 +4,7 @@ androidxHiltNavigationCompose = "1.2.0"
 bom = "VERSION"
 coilCompose = "3.0.0-rc01"
 hiltAndroidCompiler = "2.51.1"
-hiltNavigationCompose = "2.8.1"
-kotlin = "1.9.25"
+kotlin = "2.0.21"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,7 +14,9 @@ ktorClientAndroidVersion = "3.0.0-rc-1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.2"
 composeBom = "2024.09.03"
+ksp = "2.0.21-1.0.25"
 navigationCompose = "2.8.2"
+koin = "3.5.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,10 +45,21 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 #noinspection SimilarGradleDependency
 ktor-client-android-v300rc1 = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroidVersion" }
-
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+[bundles]
+koin = [
+    "koin-core",
+    "koin-android",
+    "koin-androidx-compose"
+]
 
 

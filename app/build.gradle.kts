@@ -2,10 +2,11 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
     kotlin("plugin.serialization") version "1.9.25"
-    id("org.jetbrains.kotlin.android") version "1.9.25"
+    id("org.jetbrains.kotlin.android") version "2.0.21"
+    alias(libs.plugins.compose.compiler)
 
 
 }
