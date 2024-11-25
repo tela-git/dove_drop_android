@@ -1,29 +1,36 @@
 package com.example.dovedrop.chat.presentation
 
+import ChatListScreen
+import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dovedrop.chat.data.network.NetworkConnectionState
 import com.example.dovedrop.chat.data.network.rememberConnectivityState
+import com.example.dovedrop.chat.domain.util.toString
 import com.example.dovedrop.chat.presentation.navigation.AppScreens
-import com.example.dovedrop.chat.presentation.ui.screens.ChatDetailScreen
-import com.example.dovedrop.chat.presentation.ui.screens.ChatListScreen
-import com.example.dovedrop.chat.presentation.ui.screens.ContactListScreen
-import com.example.dovedrop.chat.presentation.ui.screens.LoginScreen
+import com.example.dovedrop.chat.presentation.ui.screens.AppViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.NoInternetScreen
-import com.example.dovedrop.chat.presentation.ui.screens.OnBoardingScreen
-import com.example.dovedrop.chat.presentation.ui.screens.SignUpScreen
-import com.example.dovedrop.chat.presentation.viewmodel.AppViewModel
-import com.example.dovedrop.chat.presentation.viewmodel.AuthViewModel
+import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthEvents
+import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
+import com.example.dovedrop.chat.presentation.ui.screens.auth.LoginScreen
+import com.example.dovedrop.chat.presentation.ui.screens.auth.SignUpScreen
+import com.example.dovedrop.chat.presentation.ui.screens.chat.chat_detail.ChatDetailScreen
+import com.example.dovedrop.chat.presentation.ui.screens.onboard.OnBoardingScreen
+import com.example.dovedrop.chat.presentation.utils.ObserveAsEvents
 
 @Composable
 fun DoveDropApp(
@@ -31,17 +38,43 @@ fun DoveDropApp(
     val appViewModel: AppViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = hiltViewModel()
     val navController = rememberNavController()
-
+    val context = LocalContext.current
     val connectionState by rememberConnectivityState()
     val isNetworkConnected by remember(connectionState) {
         derivedStateOf {
             connectionState === NetworkConnectionState.Available
         }
     }
+    val isUserLoggedIn by authViewModel.authState.collectAsState()
+    var isLogoutDialogVisible by remember { mutableStateOf(false) }
+
     Scaffold(
-        topBar = { },
-        bottomBar = { }
+        topBar = {
+
+        },
+        bottomBar = {
+
+        }
     ) { innerPadding->
+
+        ObserveAsEvents(authViewModel.events) {event->
+            when(event) {
+                is AuthEvents.Error -> {
+                    Toast.makeText(
+                        context,
+                        event.error.toString(context),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                is AuthEvents.Success -> {
+                    Toast.makeText(
+                        context,
+                        event.success,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
         NavHost(
             navController = navController,
             startDestination = AppScreens.OnBoarding.route
@@ -49,6 +82,13 @@ fun DoveDropApp(
             composable(
                 route = AppScreens.OnBoarding.route
             ) {
+                LaunchedEffect(Unit) {
+                    if(isUserLoggedIn) {
+                        navController.navigate(AppScreens.ChatList.route) {
+                            popUpTo(AppScreens.ChatList.route)
+                        }
+                    }
+                }
                 OnBoardingScreen(
                     modifier = Modifier
                         .padding(innerPadding),
@@ -70,13 +110,25 @@ fun DoveDropApp(
             composable(
                 route = AppScreens.ChatList.route
             ) {
+                LaunchedEffect(key1 = isUserLoggedIn) {
+                    if(!isUserLoggedIn) {
+                        navController.navigate(AppScreens.Login.route) {
+                            popUpTo(AppScreens.Login.route)
+                        }
+                    }
+                }
                 ChatListScreen(
                     modifier = Modifier
                         .padding(innerPadding),
-                    authViewModel = authViewModel,
-                    navController = navController,
-                    isNetworkConnected = isNetworkConnected,
-                    fetchContacts = appViewModel::getContacts
+                    isLogoutDialogVisible = isLogoutDialogVisible,
+                    changeLogoutDialogVisibility = { isLogoutDialogVisible = it },
+                    auth = authViewModel.auth,
+                    onLogoutClick = {
+                        authViewModel.logoutUser()
+                        isLogoutDialogVisible = false
+                    },
+                    onSearchIconClick = { appViewModel.addUser() },
+                    chatRoomsList =  appViewModel.chatRoomsList.collectAsState()
                 )
             }
             composable(
@@ -108,19 +160,6 @@ fun DoveDropApp(
 
                 )
             }
-            composable(
-                route = AppScreens.ContactList.route
-            ) {
-                ContactListScreen(
-                    modifier = Modifier
-                        .padding(innerPadding),
-                    navController = navController,
-                    contactListUiState = appViewModel.contactListUiState.collectAsState().value
-                )
-            }
-
         }
     }
-
-
 }

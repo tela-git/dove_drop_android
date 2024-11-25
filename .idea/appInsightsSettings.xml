@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.dovedrop" />
+                  <option name="mobileSdkAppId" value="1:889064081744:android:005d25f2d33f15e5a14455" />
+                  <option name="projectId" value="dove-drop-android" />
+                  <option name="projectNumber" value="889064081744" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

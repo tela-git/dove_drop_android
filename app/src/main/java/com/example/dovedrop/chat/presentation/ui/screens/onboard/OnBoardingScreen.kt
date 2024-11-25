@@ -1,4 +1,4 @@
-package com.example.dovedrop.chat.presentation.ui.screens
+package com.example.dovedrop.chat.presentation.ui.screens.onboard
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -40,8 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.dovedrop.R
 import com.example.dovedrop.chat.presentation.navigation.AppScreens
-import com.example.dovedrop.chat.presentation.viewmodel.AppAuthState
-import com.example.dovedrop.chat.presentation.viewmodel.AuthViewModel
+import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 
 @Composable
 fun OnBoardingScreen(
@@ -52,11 +51,8 @@ fun OnBoardingScreen(
     val authState by authViewModel.authState.collectAsState()
 
     var currentImage by remember { mutableIntStateOf(0) }
-
     LaunchedEffect(authState) {
-        if(
-            authState.authState == AppAuthState.Authenticated
-        ) {
+        if(authState) {
             navController.navigate(AppScreens.ChatList.route) {
                 popUpTo(AppScreens.ChatList.route) { inclusive = false }
             }

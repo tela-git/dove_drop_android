@@ -7,8 +7,7 @@ plugins {
     kotlin("plugin.serialization") version "1.9.25"
     id("org.jetbrains.kotlin.android") version "2.0.21"
     alias(libs.plugins.compose.compiler)
-
-
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -54,9 +53,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -93,22 +89,20 @@ dependencies {
     implementation(libs.coil.network.okhttp)
 
     // Gson
-    implementation("com.google.code.gson:gson:2.10.1")
-
-    // Supabase
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.0.0"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:realtime-kt")
-
+    implementation(libs.gson)
 
     // Ktor client
     implementation(libs.ktor.client.android.v300rc1)
 
-    // Moshi
-    implementation("io.github.jan-tennert.supabase:serializer-moshi:3.0.0")
-    implementation("com.squareup.moshi:moshi:1.15.1")
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
+    implementation (libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage)
 
+    // Icons
+    implementation(libs.androidx.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

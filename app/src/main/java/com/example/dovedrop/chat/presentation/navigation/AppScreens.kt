@@ -1,7 +1,7 @@
 package com.example.dovedrop.chat.presentation.navigation
 
 sealed class AppScreens(val route: String) {
-    data object ChatList: AppScreens(route = "ChatList")
+    data object ChatList: AppScreens(route = "ChatRoomsList")
     data object ChatDetail: AppScreens(route = "ChatDetail")
     data object CallList: AppScreens(route = "CallList")
     data object Login: AppScreens(route = "Login")

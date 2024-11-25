@@ -3,4 +3,19 @@
     <string name="onboarding_one_message">Message privately and securely</string>
     <string name="onboarding_two_message">No statuses, no channels e.t.c.</string>
     <string name="onboarding_two_message_tag">Only Chats and Calls</string>
+    <string name="no_digit">Your password must contain atleast one digit</string>
+    <string name="small_password">Password must be more than 8 characters</string>
+    <string name="incorrect_credentials">Incorrect email or password</string>
+    <string name="no_uppercase">Your password should contain atleast one uppercase character</string>
+    <string name="no_lowercase">Your password should contain one lowercase character</string>
+    <string name="message">message</string>
+    <string name="voice_call">voice call</string>
+    <string name="add_chat">Add chat</string>
+    <string name="contacts">Contacts</string>
+    <string name="close_contacts_dialog">close contacts view</string>
+    <string name="select_contact">Select contact</string>
+    <string name="add_new_contact">Add new contact</string>
+    <string name="your_contacts">Your contacts</string>
+    <string name="create_new_contact">Create new contact</string>
+    <string name="create_contact">Create contact</string>
 </resources>

@@ -1,23 +1,16 @@
 package com.example.dovedrop.chat.data.repository
 
-import com.example.dovedrop.chat.domain.model.MessageDTO
-import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.postgrest.from
+import com.example.dovedrop.chat.domain.model.ChatRoom
+import com.example.dovedrop.chat.domain.network.ChatRepository
+import com.example.dovedrop.chat.domain.util.NetworkError
+import com.example.dovedrop.chat.domain.util.Result
+import com.google.firebase.Firebase
 
-interface ChatRepository {
-    suspend fun getChatMessages(): List<MessageDTO>
-    suspend fun getMessageOfA(): List<MessageDTO>
-}
 
-class ChatRepositoryImpl(private val supabase: SupabaseClient): ChatRepository {
-
-    override suspend fun getChatMessages(): List<MessageDTO> {
-        return supabase.from("messages")
-            .select()
-            .decodeList<MessageDTO>()
-    }
-
-    override suspend fun getMessageOfA(): List<MessageDTO> {
-        return emptyList()
+class RemoteChatRepository(
+    private val firebaseDb: Firebase
+): ChatRepository {
+    override suspend fun getChats(): Result<List<ChatRoom>, NetworkError> {
+        TODO("Not yet implemented")
     }
 }
