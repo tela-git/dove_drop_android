@@ -29,6 +29,8 @@ import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.LoginScreen
 import com.example.dovedrop.chat.presentation.ui.screens.auth.SignUpScreen
 import com.example.dovedrop.chat.presentation.ui.screens.chat.chat_detail.ChatDetailScreen
+import com.example.dovedrop.chat.presentation.ui.screens.contacts.ContactEvents
+import com.example.dovedrop.chat.presentation.ui.screens.contacts.ContactViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.onboard.OnBoardingScreen
 import com.example.dovedrop.chat.presentation.utils.ObserveAsEvents
 
@@ -37,6 +39,8 @@ fun DoveDropApp(
 ) {
     val appViewModel: AppViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = hiltViewModel()
+    val contactViewModel: ContactViewModel = hiltViewModel()
+
     val navController = rememberNavController()
     val context = LocalContext.current
     val connectionState by rememberConnectivityState()
@@ -71,6 +75,31 @@ fun DoveDropApp(
                         context,
                         event.success,
                         Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+        ObserveAsEvents(contactViewModel.events) {event->
+            when(event) {
+                is ContactEvents.ContactAddedSuccessfully -> {
+                    Toast.makeText(
+                        context,
+                        "contact added successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                ContactEvents.ContactAlreadyExists ->  {
+                    Toast.makeText(
+                        context,
+                        "contact already exists",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                ContactEvents.FailedToAddContact ->  {
+                    Toast.makeText(
+                        context,
+                        "Failed to add contact",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -128,7 +157,8 @@ fun DoveDropApp(
                         isLogoutDialogVisible = false
                     },
                     onSearchIconClick = { appViewModel.addUser() },
-                    chatRoomsList =  appViewModel.chatRoomsList.collectAsState()
+                    chatRoomsList =  appViewModel.chatRoomsList.collectAsState(),
+                    contactViewModel = contactViewModel
                 )
             }
             composable(

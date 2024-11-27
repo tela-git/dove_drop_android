@@ -4,7 +4,6 @@ androidxHiltNavigationCompose = "1.2.0"
 bom = "VERSION"
 coilCompose = "3.0.0-rc01"
 firebaseBom = "33.6.0"
-firebaseFirestoreKtx = "25.1.1"
 gson = "2.10.1"
 hiltAndroidCompiler = "2.51.1"
 kotlin = "2.0.21"
@@ -12,6 +11,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxSerializationJson = "1.7.3"
 ktorClientAndroid = "2.3.12"
 ktorClientAndroidVersion = "3.0.0-rc-1"
 lifecycleRuntimeKtx = "2.8.7"
@@ -35,7 +35,7 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-database = { module = "com.google.firebase:firebase-database" }
-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
@@ -54,6 +54,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 #noinspection SimilarGradleDependency
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 #noinspection SimilarGradleDependency
 ktor-client-android-v300rc1 = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroidVersion" }
