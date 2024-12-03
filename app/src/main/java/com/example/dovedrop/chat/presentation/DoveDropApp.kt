@@ -28,6 +28,7 @@ import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthEvents
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.LoginScreen
 import com.example.dovedrop.chat.presentation.ui.screens.auth.SignUpScreen
+import com.example.dovedrop.chat.presentation.ui.screens.chat.ChatViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.chat.chat_detail.ChatDetailScreen
 import com.example.dovedrop.chat.presentation.ui.screens.contacts.ContactEvents
 import com.example.dovedrop.chat.presentation.ui.screens.contacts.ContactViewModel
@@ -40,6 +41,7 @@ fun DoveDropApp(
     val appViewModel: AppViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = hiltViewModel()
     val contactViewModel: ContactViewModel = hiltViewModel()
+    val chatViewModel: ChatViewModel = hiltViewModel()
 
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -156,9 +158,15 @@ fun DoveDropApp(
                         authViewModel.logoutUser()
                         isLogoutDialogVisible = false
                     },
-                    onSearchIconClick = { appViewModel.addUser() },
-                    chatRoomsList =  appViewModel.chatRoomsList.collectAsState(),
-                    contactViewModel = contactViewModel
+                    onSearchIconClick = {  },
+                    chatRoomsList =  chatViewModel.chatRoomsList.collectAsState(),
+                    contactViewModel = contactViewModel,
+                    onChatRoomCardClick = {chatRoomDetailed->
+                        chatViewModel.updateCurrentChatRoom(chatRoomDetailed)
+                        navController.navigate(AppScreens.ChatDetail.route) {
+                            popUpTo(AppScreens.ChatList.route)
+                        }
+                    },
                 )
             }
             composable(
@@ -187,7 +195,9 @@ fun DoveDropApp(
                 route = AppScreens.ChatDetail.route
             ) {
                 ChatDetailScreen(
-
+                    contactEmail = "1234@gmail.com",
+                    navController = navController,
+                    chatViewModel = chatViewModel
                 )
             }
         }
