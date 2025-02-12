@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.dovedrop.R
-import com.example.dovedrop.chat.presentation.navigation.AppScreens
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 
 @Composable
@@ -30,14 +28,6 @@ fun NoInternetScreen(
     navController: NavController,
     isNetworkConnected: Boolean
 ) {
-    LaunchedEffect(isNetworkConnected) {
-        if(isNetworkConnected){
-            navController.navigate(AppScreens.OnBoarding.route) {
-                popUpTo(AppScreens.OnBoarding.route) { inclusive = true }
-            }
-        }
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()

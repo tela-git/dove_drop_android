@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.dovedrop.chat.presentation.DoveDropApp
+import com.example.dovedrop.chat.presentation.MainNavigation
 import com.example.dovedrop.chat.presentation.theme.DoveDropTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DoveDropTheme {
-                DoveDropApp()
+                MainNavigation()
             }
         }
     }

@@ -21,7 +21,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.dovedrop.R
-import com.example.dovedrop.chat.presentation.navigation.AppScreens
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 
 @Composable
@@ -48,16 +46,10 @@ fun OnBoardingScreen(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
-    val authState by authViewModel.authState.collectAsState()
+    //val authState by authViewModel.authState.collectAsState()
 
     var currentImage by remember { mutableIntStateOf(0) }
-    LaunchedEffect(authState) {
-        if(authState) {
-            navController.navigate(AppScreens.ChatList.route) {
-                popUpTo(AppScreens.ChatList.route) { inclusive = false }
-            }
-        }
-    }
+
 
     BackHandler { if(currentImage != 0) currentImage-- }
     Column(
@@ -135,9 +127,9 @@ fun OnBoardingScreen(
                 if(currentImage != 1) {
                     currentImage++
                 } else {
-                    navController.navigate(AppScreens.Login.route) {
-                        popUpTo(AppScreens.Login.route) { inclusive = false }
-                    }
+//                    navController.navigate(AppScreens.Login.route) {
+//                        popUpTo(AppScreens.Login.route) { inclusive = false }
+//                    }
                 }
             },
             shape = RoundedCornerShape(16.dp),

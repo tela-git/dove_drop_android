@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
     kotlin("plugin.serialization") version "1.9.25"
-    id("org.jetbrains.kotlin.android") version "2.0.21"
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.services)
 }
@@ -93,13 +93,6 @@ dependencies {
 
     // Ktor client
     implementation(libs.ktor.client.android.v300rc1)
-
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
-    implementation (libs.firebase.firestore.ktx)
-    implementation(libs.firebase.storage)
 
     // Icons
     implementation(libs.androidx.material.icons.extended)

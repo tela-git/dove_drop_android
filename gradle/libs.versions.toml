@@ -1,25 +1,23 @@
 [versions]
 agp = "8.6.1"
 androidxHiltNavigationCompose = "1.2.0"
-bom = "VERSION"
-coilCompose = "3.0.0-rc01"
-firebaseBom = "33.6.0"
-gson = "2.10.1"
-hiltAndroidCompiler = "2.51.1"
-kotlin = "2.0.21"
+coilCompose = "3.0.4"
+gson = "2.11.0"
+hiltAndroidCompiler = "2.52"
+kotlin = "2.1.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxSerializationJson = "1.7.3"
-ktorClientAndroid = "2.3.12"
-ktorClientAndroidVersion = "3.0.0-rc-1"
+kotlinxSerializationJson = "1.8.0"
+ktorClientAndroid = "3.0.3"
+ktorClientAndroidVersion = "3.0.3"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.11.00"
-ksp = "2.0.21-1.0.25"
-materialIconsExtended = "1.7.5"
-navigationCompose = "2.8.4"
+composeBom = "2025.01.01"
+ksp = "2.1.0-1.0.29"
+materialIconsExtended = "1.7.7"
+navigationCompose = "2.8.6"
 koin = "3.5.6"
 googleServices = "4.4.2"
 roomCompiler = "2.6.1"
@@ -36,11 +34,6 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomComp
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
-firebase-auth = { module = "com.google.firebase:firebase-auth" }
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-database = { module = "com.google.firebase:firebase-database" }
-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
-firebase-storage = { module = "com.google.firebase:firebase-storage" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
