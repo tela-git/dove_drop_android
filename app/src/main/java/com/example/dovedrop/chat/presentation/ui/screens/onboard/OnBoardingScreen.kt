@@ -1,6 +1,6 @@
 package com.example.dovedrop.chat.presentation.ui.screens.onboard
 
-import androidx.activity.compose.BackHandler
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,17 +16,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,24 +35,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.dovedrop.R
-import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
+import com.example.dovedrop.chat.presentation.theme.DoveDropTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
-    authViewModel: AuthViewModel
+    onContinueClick: () -> Unit,
 ) {
-    //val authState by authViewModel.authState.collectAsState()
+    val onBoardingImages = listOf(Pair(R.drawable.onboarding_one,R.string.onboarding_one_message), Pair(R.drawable.onboarding_two, R.string.onboarding_two_message))
+    val pagerState = rememberPagerState(pageCount = { onBoardingImages.size })
+    val scope = rememberCoroutineScope()
 
-    var currentImage by remember { mutableIntStateOf(0) }
+    LaunchedEffect(Unit) {
+        pagerState.scrollToPage(0)
+    }
 
-
-    BackHandler { if(currentImage != 0) currentImage-- }
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -60,88 +63,118 @@ fun OnBoardingScreen(
     ) {
         Text(
             text = "Dove Drop",
-            fontSize = 36.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.headlineMedium.copy(
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Medium
+            )
         )
+
         Spacer(Modifier.height(40.dp))
-        Image(
-            painter =
-            if(currentImage == 0) painterResource(R.drawable.onboarding_one) else painterResource(R.drawable.onboarding_two),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.size(322.dp, 324.dp)
+
+        //On boarding images
+        OnBoardingHorizontalPager(
+            state = pagerState,
+            onBoardingImages = onBoardingImages
         )
+
         Text(
-            text = if(currentImage == 0)
+            text = if(pagerState.currentPage == 0)
             stringResource(R.string.onboarding_one_message) else stringResource(R.string.onboarding_two_message),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier
-                .padding(horizontal =20.dp)
-                .fillMaxWidth(),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier,
             textAlign = TextAlign.Center
         )
         Text(
-            text = if(currentImage == 1) stringResource(R.string.onboarding_two_message_tag) else " ",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
+            text = if(pagerState.currentPage == 1) stringResource(R.string.onboarding_two_message_tag) else " ",
+            style = MaterialTheme.typography.titleLarge.copy(
+                color = MaterialTheme.colorScheme.primary
+            )
         )
         Spacer(Modifier.height(30.dp))
+
+        //Horizontal pager position indicator
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
-                    .size(12.dp, 12.dp)
+                    .size(8.dp, 8.dp)
                     .background(
-                        color = if(currentImage == 0) MaterialTheme.colorScheme.onPrimaryContainer else {
+                        color = if (pagerState.currentPage == 0) MaterialTheme.colorScheme.onPrimaryContainer else {
                             MaterialTheme.colorScheme.secondaryContainer
                         }
                     )
-
             )
-            Spacer(Modifier.width(5.dp))
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
-                    .size(12.dp, 12.dp)
+                    .size(8.dp, 8.dp)
                     .background(
-                        color = if(currentImage == 1) MaterialTheme.colorScheme.onPrimaryContainer else {
+                        color = if (pagerState.currentPage == 1) MaterialTheme.colorScheme.onPrimaryContainer else {
                             MaterialTheme.colorScheme.secondaryContainer
                         }
                     )
 
             )
         }
+
         Spacer(Modifier.height(60.dp))
         Button(
             modifier = Modifier
-                .padding(20.dp)
                 .fillMaxWidth()
-                .sizeIn(minHeight = 50.dp),
+                .padding(horizontal = 20.dp)
+                .height(48.dp),
             onClick = {
-                if(currentImage != 1) {
-                    currentImage++
+                if(pagerState.currentPage != 1) {
+                    scope.launch { pagerState.scrollToPage(1) }
                 } else {
-//                    navController.navigate(AppScreens.Login.route) {
-//                        popUpTo(AppScreens.Login.route) { inclusive = false }
-//                    }
+                    onContinueClick()
                 }
             },
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Text(
-                text = if(currentImage==0) "NEXT" else "CONTINUE",
-                fontSize = 20.sp,
+                text = if(pagerState.currentPage == 0) "NEXT" else "CONTINUE",
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }
+}
 
+@Composable
+private fun OnBoardingHorizontalPager(
+    state: PagerState,
+    onBoardingImages: List<Pair<Int,Int>>
+) {
+    HorizontalPager(
+       state = state
+    ) { page->
+        Image(
+            painter = painterResource(onBoardingImages[page].first),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .aspectRatio(1f/1.01f)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OnBoardingPreview() {
+    DoveDropTheme {
+        OnBoardingScreen(
+            onContinueClick = {
+
+            }
+        )
+    }
 }

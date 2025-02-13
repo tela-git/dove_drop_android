@@ -3,10 +3,20 @@ package com.example.dovedrop.chat.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class MainNavGraph {
-    @Serializable data object OnBoarding: MainNavGraph()
-    @Serializable data object Login: MainNavGraph()
-    @Serializable data object Signup: MainNavGraph()
+sealed class AppNavGraph {
+    @Serializable data object AuthNavGraph: AppNavGraph() {
+        @Serializable
+        data object OnBoarding : AppNavGraph()
+        @Serializable
+        data object Login : AppNavGraph()
+        @Serializable
+        data object Signup : AppNavGraph()
+        @Serializable
+        data object ResetPassword: AppNavGraph()
+    }
 
-    @Serializable data object  Home: MainNavGraph()
+    @Serializable data object MainNavGraph {
+        @Serializable
+        data object Home : AppNavGraph()
+    }
 }
