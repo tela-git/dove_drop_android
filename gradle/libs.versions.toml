@@ -4,24 +4,24 @@ androidxHiltNavigationCompose = "1.2.0"
 coilCompose = "3.0.4"
 gson = "2.11.0"
 hiltAndroidCompiler = "2.52"
+koinAndroid = "4.0.2"
 kotlin = "2.1.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxSerializationJson = "1.8.0"
-ktorClientAndroid = "3.0.3"
-ktorClientAndroidVersion = "3.0.3"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2025.01.01"
+composeBom = "2025.02.00"
 ksp = "2.1.0-1.0.29"
-materialIconsExtended = "1.7.7"
-navigationCompose = "2.8.6"
-koin = "3.5.6"
+logbackClassic = "1.5.6"
+materialIconsExtended = "1.7.8"
+navigationCompose = "2.8.7"
 googleServices = "4.4.2"
 roomCompiler = "2.6.1"
 hilt = "2.52"
+ktorVersion = "3.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,12 +51,14 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-#noinspection SimilarGradleDependency
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
+koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koinAndroid" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinAndroid" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-#noinspection SimilarGradleDependency
-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
-#noinspection SimilarGradleDependency
-ktor-client-android-v300rc1 = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroidVersion" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

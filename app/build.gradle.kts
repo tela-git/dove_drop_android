@@ -56,6 +56,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/INDEX.LIST"
         }
     }
 }
@@ -84,6 +85,14 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose.v120)
 
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.compose.navigation)
+    implementation(libs.koin.compose.viewmodel)
+
+
+
     // Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
@@ -92,7 +101,12 @@ dependencies {
     implementation(libs.gson)
 
     // Ktor client
-    implementation(libs.ktor.client.android.v300rc1)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.core)
+
+    // Logging
+    implementation(libs.logback.classic)
+
 
     // Icons
     implementation(libs.androidx.material.icons.extended)
