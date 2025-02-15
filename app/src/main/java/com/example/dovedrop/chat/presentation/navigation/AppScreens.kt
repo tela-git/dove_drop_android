@@ -13,6 +13,8 @@ sealed class AppNavGraph {
         data object Signup : AppNavGraph()
         @Serializable
         data object ResetPassword: AppNavGraph()
+        @Serializable
+        data object TermsAndConditions: AppNavGraph()
     }
 
     @Serializable data object MainNavGraph {
