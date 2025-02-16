@@ -36,19 +36,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dovedrop.R
 import com.example.dovedrop.chat.presentation.theme.DoveDropTheme
+import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onContinueClick: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
+    val authViewModel: AuthViewModel = koinViewModel()
     val onBoardingImages = listOf(Pair(R.drawable.onboarding_one,R.string.onboarding_one_message), Pair(R.drawable.onboarding_two, R.string.onboarding_two_message))
     val pagerState = rememberPagerState(pageCount = { onBoardingImages.size })
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        pagerState.scrollToPage(0)
+        if(authViewModel.isUserLoggedIn()) {
+            navigateToHome()
+        }
     }
 
     Column(
@@ -126,7 +132,7 @@ fun OnBoardingScreen(
                 .height(48.dp),
             onClick = {
                 if(pagerState.currentPage != 1) {
-                    scope.launch { pagerState.scrollToPage(1) }
+                    scope.launch { pagerState.animateScrollToPage(1) }
                 } else {
                     onContinueClick()
                 }
@@ -169,8 +175,8 @@ private fun OnBoardingPreview() {
     DoveDropTheme {
         OnBoardingScreen(
             onContinueClick = {
-
-            }
+            },
+            navigateToHome = {}
         )
     }
 }
