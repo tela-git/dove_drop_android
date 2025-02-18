@@ -1,11 +1,8 @@
 package com.example.dovedrop.chat.presentation.ui.screens.auth
 
-import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dovedrop.chat.presentation.ui.components.buttons.LongButtonPrimary
 import com.example.dovedrop.chat.presentation.ui.components.input_fields.EmailInputField
 import com.example.dovedrop.chat.presentation.ui.components.input_fields.PassWordInputField
+import com.example.dovedrop.chat.presentation.ui.components.loading.LoadingPage
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -160,15 +157,7 @@ fun LoginScreen(
                 }
             }
         if(loginUIData.isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.onBackground.copy(0.5f))
-                    .clickable(enabled = false) { },
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            LoadingPage()
         }
 
     }

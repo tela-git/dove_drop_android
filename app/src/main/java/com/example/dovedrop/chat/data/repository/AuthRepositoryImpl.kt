@@ -1,18 +1,24 @@
 package com.example.dovedrop.chat.data.repository
 
 import android.util.Log
+import com.example.dovedrop.chat.data.model.VerifyEmailError
 import com.example.dovedrop.chat.data.network.dto.auth.AuthResponse
+import com.example.dovedrop.chat.data.network.dto.auth.FPResponseError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginRequestData
 import com.example.dovedrop.chat.data.network.dto.auth.SignUpError
 import com.example.dovedrop.chat.data.network.dto.auth.SignUpRequestData
+import com.example.dovedrop.chat.data.network.dto.auth.SimpleAPIResponse
+import com.example.dovedrop.chat.data.network.dto.auth.VerifyEmailResponse
 import com.example.dovedrop.chat.domain.network.AuthRepository
 import com.example.dovedrop.chat.domain.util.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.append
 import io.ktor.http.contentType
 
 private const val AUTH_TAG = "AuthTag"
@@ -94,6 +100,75 @@ class AuthRepositoryImpl(
         } catch (e: Exception) {
             Log.e(AUTH_TAG, "Error: $e")
             return Result.Error(SignUpError.UnknownError)
+        }
+    }
+
+    override suspend fun emailVerify(email: String, otp: String): Result<String, VerifyEmailError> {
+        try {
+            val response = httpClient.post("/auth/verify-email")
+                .body<VerifyEmailResponse>()
+
+            return if (response.status == "Success") {
+                Result.Success("Email verified successfully.")
+            } else {
+                when (response.status) {
+                    VerifyEmailError.InvalidOTP.value -> {
+                        Result.Error(VerifyEmailError.InvalidOTP)
+                    }
+
+                    VerifyEmailError.BadRequest.value -> {
+                        Result.Error(VerifyEmailError.BadRequest)
+                    }
+
+                    VerifyEmailError.NoOTPToVerify.value -> {
+                        Result.Error(VerifyEmailError.NoOTPToVerify)
+                    }
+
+                    VerifyEmailError.ServerError.value -> {
+                        Result.Error(VerifyEmailError.ServerError)
+                    }
+
+                    else -> {
+                        Result.Error(VerifyEmailError.UnknownError)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            return Result.Error(VerifyEmailError.UnknownError)
+        }
+    }
+
+    override suspend fun sendOTPToUserEmail(email: String): Result<String, FPResponseError> {
+        return try {
+            val response = httpClient
+                .get(urlString = "/auth/forgot-password") {
+                    url {
+                        parameters.append("email", email)
+                    }
+                }
+                .body<SimpleAPIResponse>()
+            if (response.status == "Success") {
+                Result.Success("OTP sent successfully")
+            } else {
+                when (response.message) {
+                    FPResponseError.InvalidRequestFormat.value -> {
+                        Result.Error(FPResponseError.InvalidRequestFormat)
+                    }
+                    FPResponseError.InvalidRequest.value -> {
+                        Result.Error(FPResponseError.InvalidRequest)
+                    }
+                    FPResponseError.ServerError.value -> {
+                        Result.Error(FPResponseError.ServerError)
+                    }
+                    else -> {
+                        Log.e(AUTH_TAG, "Error: ${response.message}")
+                        Result.Error(FPResponseError.UnknownError)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(AUTH_TAG, "Error: ${e.message}")
+            Result.Error(FPResponseError.UnknownError)
         }
     }
 }

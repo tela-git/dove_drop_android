@@ -3,6 +3,8 @@ package com.example.dovedrop.chat.presentation.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.dovedrop.chat.data.model.VerifyEmailError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginRequestData
 import com.example.dovedrop.chat.data.network.dto.auth.SignUpError
@@ -36,6 +38,8 @@ class AuthViewModel(
     private val _signUpUIData = MutableStateFlow(SignUpUIData())
     val signUpUIData = _signUpUIData.asStateFlow()
 
+    private val _emailVerificationUIData = MutableStateFlow(EmailVerificationUIData())
+    val emailVerificationUIData = _emailVerificationUIData.asStateFlow()
 
     fun loginUser() {
         val loginRequestData = LoginRequestData(
@@ -100,11 +104,11 @@ class AuthViewModel(
             when(response) {
                 is Result.Success -> {
                     _toastChannel.send("OTP sent Successfully")
-                    _signUpUIData.update { it.copy(isLoading = false) }
+                    _signUpUIData.update { it.copy(isLoading = false, isSignUpSuccess = true) }
                     Log.d(AUTH_TAG_VIEWMODEL, "OTP SENT SUCCESS : ${response.data}")
                 }
                 is Result.Error -> {
-                    _signUpUIData.update { it.copy(isLoading = false) }
+                    _signUpUIData.update { it.copy(isLoading = false, isSignUpSuccess = false) }
                     _authState.value = AuthState.UnAuthorized
                     when(response.error) {
                         is SignUpError.InvalidCredFormat -> {
@@ -120,6 +124,46 @@ class AuthViewModel(
                             _toastChannel.send("Something went wrong, try after sometime.")
                         }
                     }
+                }
+            }
+        }
+    }
+
+    fun verifyEmailOTP(email: String) {
+        viewModelScope.launch {
+            _emailVerificationUIData.update { it.copy(isLoading = true) }
+            val response = authRepository.emailVerify(
+                email = email,
+                otp = emailVerificationUIData.value.otp
+            )
+            when(response) {
+                is Result.Success -> {
+                    _emailVerificationUIData.update { state->
+                        state.copy(
+                            isLoading = false,
+                            isEmailVerified = true
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    when(response.error) {
+                        is VerifyEmailError.InvalidOTP -> {
+                            _toastChannel.send("Invalid OTP")
+                        }
+                        VerifyEmailError.BadRequest -> {
+                            _toastChannel.send("Enter OTP in a valid format!")
+                        }
+                        VerifyEmailError.NoOTPToVerify -> {
+                            _toastChannel.send("Invalid attempt!")
+                        }
+                        VerifyEmailError.ServerError -> {
+                            _toastChannel.send("Please try after some time.")
+                        }
+                        VerifyEmailError.UnknownError -> {
+                            _toastChannel.send("Something went wrong!, please try again.")
+                        }
+                    }
+                    _emailVerificationUIData.update { state-> state.copy(isLoading = false, isEmailVerified = false) }
                 }
             }
         }
@@ -175,6 +219,14 @@ class AuthViewModel(
             )
         }
     }
+    //Methods for updating EmailVerificationScreen UI
+    fun updateEnteredOTP(otp: String) {
+        _emailVerificationUIData.update { state->
+            state.copy(
+                otp = otp
+            )
+        }
+    }
 
 }
 
@@ -198,4 +250,11 @@ data class SignUpUIData(
     val passwordVisibility: Boolean = false,
     val buttonEnabled: Boolean = false,
     val isLoading: Boolean = false,
+    val isSignUpSuccess: Boolean = false
+)
+
+data class EmailVerificationUIData(
+    val isLoading: Boolean = false,
+    val otp: String = "",
+    val isEmailVerified: Boolean = false,
 )

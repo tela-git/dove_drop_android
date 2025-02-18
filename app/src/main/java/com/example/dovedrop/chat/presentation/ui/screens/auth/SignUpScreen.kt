@@ -37,13 +37,15 @@ import com.example.dovedrop.chat.presentation.ui.components.buttons.LongButtonPr
 import com.example.dovedrop.chat.presentation.ui.components.input_fields.EmailInputField
 import com.example.dovedrop.chat.presentation.ui.components.input_fields.NameInputField
 import com.example.dovedrop.chat.presentation.ui.components.input_fields.PassWordInputField
+import com.example.dovedrop.chat.presentation.ui.components.loading.LoadingPage
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     onGoToLoginClick: () -> Unit,
-    onTAndCClick: () -> Unit
+    onTAndCClick: () -> Unit,
+    onSignUpComplete: (email: String) -> Unit,
 ) {
     val viewModel : AuthViewModel = koinViewModel()
     val signUpUIData by viewModel.signUpUIData.collectAsState()
@@ -53,6 +55,13 @@ fun SignUpScreen(
     LaunchedEffect(Unit) {
         viewModel.toastFlow.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.signUpUIData.collect { state->
+            if(state.isSignUpSuccess) {
+                onSignUpComplete(signUpUIData.email)
+            }
         }
     }
 
@@ -185,15 +194,7 @@ fun SignUpScreen(
             }
         }
         if(signUpUIData.isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.onBackground.copy(0.5f))
-                    .clickable(enabled = false) { },
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            LoadingPage()
         }
     }
 }
