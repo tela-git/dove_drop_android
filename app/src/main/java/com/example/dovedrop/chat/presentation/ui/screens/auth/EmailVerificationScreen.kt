@@ -1,5 +1,6 @@
 package com.example.dovedrop.chat.presentation.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +40,14 @@ fun EmailVerificationScreen(
     val viewModel: AuthViewModel = koinViewModel()
     val uiState by viewModel.emailVerificationUIData.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState(10)
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        viewModel.toastFlowEV.collect {message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.emailVerificationUIData.collect {state->
@@ -85,6 +96,7 @@ fun EmailVerificationScreen(
             LongButtonPrimary(
                 text = "Verify",
                 onClick = {
+                    focusManager.clearFocus()
                     viewModel.verifyEmailOTP(
                         email = email
                     )

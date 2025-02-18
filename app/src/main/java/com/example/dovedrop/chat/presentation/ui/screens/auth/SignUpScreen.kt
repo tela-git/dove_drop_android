@@ -53,6 +53,9 @@ fun SignUpScreen(
     val localFocusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
+        viewModel.resetSignUpOnLaunch()
+    }
+    LaunchedEffect(Unit) {
         viewModel.toastFlow.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }

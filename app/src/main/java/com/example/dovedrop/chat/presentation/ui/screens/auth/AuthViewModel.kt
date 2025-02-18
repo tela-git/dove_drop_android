@@ -29,8 +29,8 @@ class AuthViewModel(
     private val _authState = MutableStateFlow<AuthState>(AuthState.UnAuthorized)
     val authState = _authState.asStateFlow()
 
-    private val _toastChannel = Channel<String>(Channel.BUFFERED)
-    val toastFlow = _toastChannel.receiveAsFlow()
+    private val _toastChannelLS = Channel<String>(Channel.BUFFERED)
+    val toastFlow = _toastChannelLS.receiveAsFlow()
 
     private val _loginUIData = MutableStateFlow(LoginUIData())
     val loginUIData = _loginUIData.asStateFlow()
@@ -40,6 +40,9 @@ class AuthViewModel(
 
     private val _emailVerificationUIData = MutableStateFlow(EmailVerificationUIData())
     val emailVerificationUIData = _emailVerificationUIData.asStateFlow()
+
+    private val _toastChannelEV = Channel<String>(Channel.BUFFERED)
+    val toastFlowEV = _toastChannelEV.receiveAsFlow()
 
     fun loginUser() {
         val loginRequestData = LoginRequestData(
@@ -55,7 +58,7 @@ class AuthViewModel(
                 is Result.Success -> {
                     prefs.saveToken(response.data) //saves the token to the EncryptedPrefs I created.
                     prefs.updateLoginStatus(isLoggedIn = true)
-                    _toastChannel.send("Login Successful")
+                    _toastChannelLS.send("Login Successful")
                     _authState.value = AuthState.Authorized
                     _loginUIData.update { it.copy(isLoading = false) }
                     Log.d(AUTH_TAG_VIEWMODEL, "Login success : ${response.data}")
@@ -66,16 +69,16 @@ class AuthViewModel(
                     prefs.updateLoginStatus(isLoggedIn = false)
                     when(response.error) {
                         LoginError.UNKNOWN_ERROR -> {
-                            _toastChannel.send("Unknown Error")
+                            _toastChannelLS.send("Unknown Error")
                         }
                         LoginError.EMAIL_VERIFY_ERROR -> {
-                            _toastChannel.send("Please verify your email!")
+                            _toastChannelLS.send("Please verify your email!")
                         }
                         LoginError.INVALID_CRED_ERROR -> {
-                            _toastChannel.send("Invalid credentials")
+                            _toastChannelLS.send("Invalid credentials")
                         }
                         LoginError.TOKEN_ERROR -> {
-                            _toastChannel.send("Something went wrong, try after sometime.")
+                            _toastChannelLS.send("Something went wrong, try after sometime.")
                         }
                     }
                 }
@@ -103,7 +106,7 @@ class AuthViewModel(
             )
             when(response) {
                 is Result.Success -> {
-                    _toastChannel.send("OTP sent Successfully")
+                    _toastChannelLS.send("OTP sent Successfully")
                     _signUpUIData.update { it.copy(isLoading = false, isSignUpSuccess = true) }
                     Log.d(AUTH_TAG_VIEWMODEL, "OTP SENT SUCCESS : ${response.data}")
                 }
@@ -112,16 +115,16 @@ class AuthViewModel(
                     _authState.value = AuthState.UnAuthorized
                     when(response.error) {
                         is SignUpError.InvalidCredFormat -> {
-                            _toastChannel.send("Please enter data in a valid format!")
+                            _toastChannelLS.send("Please enter data in a valid format!")
                         }
                         is SignUpError.UserAlreadyExists -> {
-                            _toastChannel.send("User already exists with the same email!")
+                            _toastChannelLS.send("User already exists with the same email!")
                         }
                         is SignUpError.ErrorSendingOTP -> {
-                            _toastChannel.send("Unable to send OTP. Please try after some time.")
+                            _toastChannelLS.send("Unable to send OTP. Please try after some time.")
                         }
                         is SignUpError.UnknownError -> {
-                            _toastChannel.send("Something went wrong, try after sometime.")
+                            _toastChannelLS.send("Something went wrong, try after sometime.")
                         }
                     }
                 }
@@ -136,6 +139,7 @@ class AuthViewModel(
                 email = email,
                 otp = emailVerificationUIData.value.otp
             )
+            Log.d(AUTH_TAG_VIEWMODEL, "verfiyEmailOTP is called in viewmodel: isLoading =  ${emailVerificationUIData.value.isLoading}")
             when(response) {
                 is Result.Success -> {
                     _emailVerificationUIData.update { state->
@@ -144,23 +148,27 @@ class AuthViewModel(
                             isEmailVerified = true
                         )
                     }
+                    _toastChannelLS.send("Email verification successful.")
+                    Log.d(AUTH_TAG_VIEWMODEL, "Email verified successfully")
                 }
                 is Result.Error -> {
+                    Log.d(AUTH_TAG_VIEWMODEL, "Caught error in email verification: ${response.error.value}")
                     when(response.error) {
                         is VerifyEmailError.InvalidOTP -> {
-                            _toastChannel.send("Invalid OTP")
+                            _toastChannelEV.send("Invalid OTP")
                         }
-                        VerifyEmailError.BadRequest -> {
-                            _toastChannel.send("Enter OTP in a valid format!")
+                        is VerifyEmailError.BadRequest -> {
+                            _toastChannelEV.send("Enter OTP in a valid format!")
                         }
-                        VerifyEmailError.NoOTPToVerify -> {
-                            _toastChannel.send("Invalid attempt!")
+                        is VerifyEmailError.NoOTPToVerify -> {
+                            _toastChannelEV.send("Invalid attempt!")
                         }
-                        VerifyEmailError.ServerError -> {
-                            _toastChannel.send("Please try after some time.")
+                        is VerifyEmailError.ServerError -> {
+                            _toastChannelEV.send("Please try after some time.")
                         }
-                        VerifyEmailError.UnknownError -> {
-                            _toastChannel.send("Something went wrong!, please try again.")
+                        is VerifyEmailError.UnknownError -> {
+                            _toastChannelEV.send("Something went wrong!, please try again.")
+                            Log.d(AUTH_TAG_VIEWMODEL, "CAUGHT UNKNOWN ERROR: sent toast")
                         }
                     }
                     _emailVerificationUIData.update { state-> state.copy(isLoading = false, isEmailVerified = false) }
@@ -180,6 +188,13 @@ class AuthViewModel(
     }
 
     //Methods for updating signup details entered
+    fun resetSignUpOnLaunch() {
+        _signUpUIData.update { state->
+            state.copy(
+                isSignUpSuccess = false
+            )
+        }
+    }
     fun updateEnteredNameSignUp(name: String) {
         _signUpUIData.update { it.copy(name = name) }
         changeSignUpButtonEnabling()

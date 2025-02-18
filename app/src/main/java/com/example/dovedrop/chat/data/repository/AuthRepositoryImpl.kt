@@ -105,13 +105,22 @@ class AuthRepositoryImpl(
 
     override suspend fun emailVerify(email: String, otp: String): Result<String, VerifyEmailError> {
         try {
-            val response = httpClient.post("/auth/verify-email")
+            val response = httpClient
+                .post("/auth/verify-email") {
+                    contentType(ContentType.Application.Json)
+                    setBody(
+                        mapOf(
+                            "email" to email,
+                            "otp" to otp
+                        )
+                    )
+                }
                 .body<VerifyEmailResponse>()
 
             return if (response.status == "Success") {
                 Result.Success("Email verified successfully.")
             } else {
-                when (response.status) {
+                when (response.message) {
                     VerifyEmailError.InvalidOTP.value -> {
                         Result.Error(VerifyEmailError.InvalidOTP)
                     }
@@ -127,13 +136,14 @@ class AuthRepositoryImpl(
                     VerifyEmailError.ServerError.value -> {
                         Result.Error(VerifyEmailError.ServerError)
                     }
-
                     else -> {
+                        Log.d(AUTH_TAG, "GOT THIS RESPONSE FORM API: ${response.status} : ${response.message}")
                         Result.Error(VerifyEmailError.UnknownError)
                     }
                 }
             }
         } catch (e: Exception) {
+            Log.e(AUTH_TAG, "CAUGHT IN AUTHREPO: ${e.message}")
             return Result.Error(VerifyEmailError.UnknownError)
         }
     }
