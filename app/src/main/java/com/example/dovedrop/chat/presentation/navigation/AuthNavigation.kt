@@ -74,7 +74,7 @@ fun NavGraphBuilder.authNavigation(
                 email = email,
                 onEmailVerificationComplete = {
                     appNavController.navigate(AppNavGraph.AuthNavGraph.Login) {
-                        popUpTo(AppNavGraph.AuthNavGraph.EmailVerification) {
+                        popUpTo(AppNavGraph.AuthNavGraph.EmailVerification("")) {
                             inclusive = true
                         }
                     }
@@ -83,12 +83,15 @@ fun NavGraphBuilder.authNavigation(
         }
         composable<AppNavGraph.AuthNavGraph.ForgotPassword> {
             ForgotPasswordScreen(
-                onOTPSent = {
-                    appNavController.navigate(AppNavGraph.AuthNavGraph.ResetPassword)
+                onOTPSent = {email->
+                    appNavController.navigate(
+                        AppNavGraph.AuthNavGraph.ResetPassword(email)
+                    )
                 }
             )
         }
-        composable<AppNavGraph.AuthNavGraph.ResetPassword> {
+        composable<AppNavGraph.AuthNavGraph.ResetPassword> {backStackEntry->
+            val email = backStackEntry.toRoute<AppNavGraph.AuthNavGraph.ResetPassword>().email
             ResetPasswordScreen(
                 modifier = Modifier
             )

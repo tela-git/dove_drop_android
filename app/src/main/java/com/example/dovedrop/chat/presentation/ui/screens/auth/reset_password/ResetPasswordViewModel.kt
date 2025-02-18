@@ -61,6 +61,10 @@ class ResetPasswordViewModel(
         }
     }
 
+    fun updatePassword() {
+
+    }
+
     //Functions for updating FP UI
     fun updateEnteredEmailFP(email: String) {
         _fpUIData.update { state->

@@ -9,7 +9,7 @@ sealed class AppNavGraph {
         @Serializable data object Login : AppNavGraph()
         @Serializable data object Signup : AppNavGraph()
         @Serializable data object ForgotPassword: AppNavGraph()
-        @Serializable data object ResetPassword: AppNavGraph()
+        @Serializable data class ResetPassword(val email: String): AppNavGraph()
         @Serializable data class EmailVerification(val email: String): AppNavGraph()
         @Serializable data object TermsAndConditions: AppNavGraph()
     }
