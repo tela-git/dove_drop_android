@@ -40,6 +40,10 @@ fun ForgotPasswordScreen(
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
+        viewModel.resetFPState()
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.fpUIData.collect { state ->
             if (state.otpSent) {
                 onOTPSent(uiState.email)

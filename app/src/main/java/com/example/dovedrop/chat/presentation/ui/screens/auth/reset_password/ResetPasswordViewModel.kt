@@ -69,6 +69,15 @@ class ResetPasswordViewModel(
             )
         }
     }
+    fun resetFPState() {
+        _fpUIData.update {
+            it.copy(
+                email = "",
+                otpSent = false,
+                isLoading = false
+            )
+        }
+    }
 
     //Functions for updating RP UI
     fun updateEnteredOTP(otp: String) {
