@@ -1,9 +1,11 @@
 package com.example.dovedrop.chat.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
@@ -20,6 +22,8 @@ fun AppNavigation(
 ) {
     val appNavController = rememberNavController()
     val authViewModel: AuthViewModel = koinViewModel()
+    val backStack by appNavController.currentBackStackEntryAsState()
+    val currentDestination = backStack?.destination
 
     NavHost(
         navController = appNavController,
@@ -33,7 +37,8 @@ fun AppNavigation(
         // Main screens nav subgraph
         mainNavigation(
             appNavController = appNavController,
-            logout = { authViewModel.logOutUser() }
+            logout = { authViewModel.logOutUser() },
+            currentDestination = currentDestination
         )
     }
 

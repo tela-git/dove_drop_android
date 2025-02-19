@@ -1,10 +1,9 @@
-package com.example.dovedrop.chat.presentation.ui.screens.chat.chat_list
+package com.example.dovedrop.chat.presentation.ui.screens.chat.calls
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,19 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import com.example.dovedrop.chat.presentation.navigation.AppNavGraph
 import com.example.dovedrop.chat.presentation.ui.components.app_bars.AppBottomBar
-import com.example.dovedrop.chat.presentation.ui.components.app_bars.ChatsHomeTopBar
+import com.example.dovedrop.chat.presentation.ui.components.app_bars.CallsHomeTopBar
 
 @Composable
-fun ChatListHomeScreen(
-    onLogoutClick: () -> Unit,
+fun CallsHomeScreen(
     currentDestination: NavDestination?,
     onBottomBarIconClick: (AppNavGraph) -> Unit,
 ) {
     Scaffold(
         topBar = {
-            ChatsHomeTopBar(
+            CallsHomeTopBar(
                 onMoreOptionsClick = { },
-                onAccountIconClick = { },
                 isNavigateBackIconVisible = false
             )
         },
@@ -44,15 +41,8 @@ fun ChatListHomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "You are logged in. \n This is home screen"
+                text = "Calls home screen"
             )
-            Button(
-                onLogoutClick
-            ) {
-                Text(
-                    text = "Logout"
-                )
-            }
         }
     }
 }

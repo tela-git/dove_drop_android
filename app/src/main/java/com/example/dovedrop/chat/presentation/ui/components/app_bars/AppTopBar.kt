@@ -4,8 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,35 +18,23 @@ import androidx.compose.ui.text.font.FontWeight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(
+fun ChatsHomeTopBar(
     modifier: Modifier = Modifier,
     onAccountIconClick: () -> Unit,
-    onSearchIconClick: () -> Unit,
-    onSettingsIconClick: () -> Unit,
-    isNavigateBackIconVisible: Boolean
+    onMoreOptionsClick: () -> Unit,
+    isNavigateBackIconVisible: Boolean,
 ) {
     TopAppBar(
         title = {
             Text(
                 text = "Dove Drop",
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                style = MaterialTheme.typography.titleLarge.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium
+                )
             )
         },
         actions = {
-            IconButton(
-                onClick = { }
-            ) {
-                IconButton(
-                    onClick = { onSearchIconClick() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
             IconButton(
                 onClick = { onAccountIconClick() }
             ) {
@@ -57,11 +45,11 @@ fun AppTopBar(
                 )
             }
             IconButton(
-                onClick = { onSettingsIconClick() }
+                onClick = { onMoreOptionsClick() }
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = "Settings",
+                    imageVector = Icons.Outlined.MoreVert,
+                    contentDescription = "More options",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
@@ -77,6 +65,52 @@ fun AppTopBar(
                     )
                 }
             }
-        }
+        },
+        modifier = modifier
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CallsHomeTopBar(
+    modifier: Modifier = Modifier,
+    onMoreOptionsClick: () -> Unit,
+    isNavigateBackIconVisible: Boolean,
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = "Calls",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium
+                )
+            )
+        },
+        actions = {
+            IconButton(
+                onClick = { onMoreOptionsClick() }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.MoreVert,
+                    contentDescription = "More options",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        },
+        navigationIcon = {
+            AnimatedVisibility(isNavigateBackIconVisible){
+                IconButton(
+                    onClick = { }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Navigate"
+                    )
+                }
+            }
+        },
+        modifier = modifier
     )
 }
