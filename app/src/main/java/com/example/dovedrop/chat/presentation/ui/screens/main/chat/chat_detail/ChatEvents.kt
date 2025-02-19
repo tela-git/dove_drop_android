@@ -1,4 +1,4 @@
-package com.example.dovedrop.chat.presentation.ui.screens.chat.chat_detail
+package com.example.dovedrop.chat.presentation.ui.screens.main.chat.chat_detail
 
 sealed interface ChatEvents {
     data object UnknownErrorOccurred: ChatEvents

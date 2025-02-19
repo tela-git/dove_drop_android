@@ -13,7 +13,7 @@ import com.example.dovedrop.chat.presentation.ui.screens.auth.LoginScreen
 import com.example.dovedrop.chat.presentation.ui.screens.auth.reset_password.ResetPasswordScreen
 import com.example.dovedrop.chat.presentation.ui.screens.auth.SignUpScreen
 import com.example.dovedrop.chat.presentation.ui.screens.auth.t_and_c.TermsAndConditionsScreen
-import com.example.dovedrop.chat.presentation.ui.screens.chat.chat_list.ChatListHomeScreen
+import com.example.dovedrop.chat.presentation.ui.screens.main.chat.chat_list.ChatListHomeScreen
 import com.example.dovedrop.chat.presentation.ui.screens.onboard.OnBoardingScreen
 import org.koin.androidx.compose.koinViewModel
 

@@ -17,5 +17,6 @@ sealed class AppNavGraph {
     @Serializable data object MainNavGraph: AppNavGraph() {
         @Serializable data object Home : AppNavGraph()
         @Serializable data object Calls: AppNavGraph()
+        @Serializable data object SettingsHome: AppNavGraph()
     }
 }

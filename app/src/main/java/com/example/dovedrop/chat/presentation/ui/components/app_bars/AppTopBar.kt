@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun ChatsHomeTopBar(
     modifier: Modifier = Modifier,
-    onAccountIconClick: () -> Unit,
     onMoreOptionsClick: () -> Unit,
     isNavigateBackIconVisible: Boolean,
 ) {
@@ -35,15 +34,6 @@ fun ChatsHomeTopBar(
             )
         },
         actions = {
-            IconButton(
-                onClick = { onAccountIconClick() }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = "Profile",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
             IconButton(
                 onClick = { onMoreOptionsClick() }
             ) {

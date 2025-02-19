@@ -1,4 +1,4 @@
-package com.example.dovedrop.chat.presentation.ui.screens.chat.calls
+package com.example.dovedrop.chat.presentation.ui.screens.main.chat.calls
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

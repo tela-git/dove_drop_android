@@ -10,8 +10,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.dovedrop.chat.presentation.ui.screens.chat.calls.CallsHomeScreen
-import com.example.dovedrop.chat.presentation.ui.screens.chat.chat_list.ChatListHomeScreen
+import com.example.dovedrop.chat.presentation.ui.screens.main.chat.calls.CallsHomeScreen
+import com.example.dovedrop.chat.presentation.ui.screens.main.chat.chat_list.ChatListHomeScreen
+import com.example.dovedrop.chat.presentation.ui.screens.main.settings.SettingsHomeScreen
+import kotlin.math.log
 
 fun NavGraphBuilder.mainNavigation(
     appNavController: NavHostController,
@@ -23,12 +25,6 @@ fun NavGraphBuilder.mainNavigation(
     ) {
         composable<AppNavGraph.MainNavGraph.Home> {
             ChatListHomeScreen(
-                onLogoutClick = {
-                    logout()
-                    appNavController.navigate(AppNavGraph.AuthNavGraph) {
-                        popUpTo(AppNavGraph.MainNavGraph)
-                    }
-                },
                 onBottomBarIconClick = { route->
                     appNavController.navigate(route) {
                         popUpTo<AppNavGraph.MainNavGraph.Home> {
@@ -38,7 +34,10 @@ fun NavGraphBuilder.mainNavigation(
                         launchSingleTop = true
                     }
                 },
-                currentDestination = currentDestination
+                currentDestination = currentDestination,
+                onMoreOptionsClick = {
+                    appNavController.navigate(AppNavGraph.MainNavGraph.SettingsHome)
+                }
             )
         }
         composable<AppNavGraph.MainNavGraph.Calls> {
@@ -53,6 +52,21 @@ fun NavGraphBuilder.mainNavigation(
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+        composable<AppNavGraph.MainNavGraph.SettingsHome> {
+            SettingsHomeScreen(
+                onNavigateUp = {
+                    appNavController.navigateUp()
+                },
+                onLogoutClick = {
+                    logout()
+                    appNavController.navigate(AppNavGraph.AuthNavGraph) {
+                        popUpTo<AppNavGraph.MainNavGraph> {
+                            inclusive = true
+                        }
+                    }
+                },
             )
         }
     }

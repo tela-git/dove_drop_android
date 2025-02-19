@@ -7,7 +7,7 @@ import com.example.dovedrop.chat.presentation.ui.components.otp.OtpViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.AppViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.reset_password.ResetPasswordViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.t_and_c.TAndCViewModel
-import com.example.dovedrop.chat.presentation.ui.screens.chat.ChatViewModel
+import com.example.dovedrop.chat.presentation.ui.screens.main.chat.ChatViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
