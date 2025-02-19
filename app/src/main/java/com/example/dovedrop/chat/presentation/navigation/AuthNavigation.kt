@@ -93,7 +93,15 @@ fun NavGraphBuilder.authNavigation(
         composable<AppNavGraph.AuthNavGraph.ResetPassword> {backStackEntry->
             val email = backStackEntry.toRoute<AppNavGraph.AuthNavGraph.ResetPassword>().email
             ResetPasswordScreen(
-                modifier = Modifier
+                modifier = Modifier,
+                email = email,
+                onPasswordResetSuccess = {
+                    appNavController.navigate(AppNavGraph.AuthNavGraph.Login) {
+                        popUpTo<AppNavGraph.AuthNavGraph.ForgotPassword> {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
         composable<AppNavGraph.AuthNavGraph.TermsAndConditions> {

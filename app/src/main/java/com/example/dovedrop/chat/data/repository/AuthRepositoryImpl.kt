@@ -1,15 +1,16 @@
 package com.example.dovedrop.chat.data.repository
 
 import android.util.Log
-import com.example.dovedrop.chat.data.model.VerifyEmailError
-import com.example.dovedrop.chat.data.network.dto.auth.AuthResponse
-import com.example.dovedrop.chat.data.network.dto.auth.FPResponseError
+import com.example.dovedrop.chat.data.model.auth.VerifyEmailError
+import com.example.dovedrop.chat.data.network.dto.auth.response.AuthResponse
+import com.example.dovedrop.chat.data.model.auth.FPResponseError
+import com.example.dovedrop.chat.data.model.auth.ResetPasswordError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginRequestData
-import com.example.dovedrop.chat.data.network.dto.auth.SignUpError
+import com.example.dovedrop.chat.data.model.auth.SignUpError
 import com.example.dovedrop.chat.data.network.dto.auth.SignUpRequestData
-import com.example.dovedrop.chat.data.network.dto.auth.SimpleAPIResponse
-import com.example.dovedrop.chat.data.network.dto.auth.VerifyEmailResponse
+import com.example.dovedrop.chat.data.network.dto.auth.response.SimpleAPIResponse
+import com.example.dovedrop.chat.data.network.dto.auth.response.VerifyEmailResponse
 import com.example.dovedrop.chat.domain.network.AuthRepository
 import com.example.dovedrop.chat.domain.util.Result
 import io.ktor.client.HttpClient
@@ -18,7 +19,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.append
 import io.ktor.http.contentType
 
 private const val AUTH_TAG = "AuthTag"
@@ -98,7 +98,7 @@ class AuthRepositoryImpl(
                 }
             }
         } catch (e: Exception) {
-            Log.e(AUTH_TAG, "Error: $e")
+            //Log.e(AUTH_TAG, "Error: $e")
             return Result.Error(SignUpError.UnknownError)
         }
     }
@@ -137,13 +137,13 @@ class AuthRepositoryImpl(
                         Result.Error(VerifyEmailError.ServerError)
                     }
                     else -> {
-                        Log.d(AUTH_TAG, "GOT THIS RESPONSE FORM API: ${response.status} : ${response.message}")
+                        //Log.d(AUTH_TAG, "GOT THIS RESPONSE FORM API: ${response.status} : ${response.message}")
                         Result.Error(VerifyEmailError.UnknownError)
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(AUTH_TAG, "CAUGHT IN AUTHREPO: ${e.message}")
+            //Log.e(AUTH_TAG, "CAUGHT IN AUTHREPO: ${e.message}")
             return Result.Error(VerifyEmailError.UnknownError)
         }
     }
@@ -179,6 +179,53 @@ class AuthRepositoryImpl(
         } catch (e: Exception) {
             Log.e(AUTH_TAG, "Error: ${e.message}")
             Result.Error(FPResponseError.UnknownError)
+        }
+    }
+
+
+    override suspend fun resetPassword(
+        otp: String,
+        email: String,
+        newPassword: String
+    ): Result<String, ResetPasswordError> {
+        return try {
+            val response = httpClient
+                .post("/auth/reset-password") {
+                    contentType(ContentType.Application.Json)
+                    setBody(
+                        mapOf(
+                            "otp" to otp,
+                            "email" to email,
+                            "newPassword" to newPassword
+                        )
+                    )
+                }
+                .body<SimpleAPIResponse>()
+
+            if(response.status == "Success") {
+                Result.Success("Password reset successful.")
+            } else {
+                when(response.message) {
+                    ResetPasswordError.InvalidRequestFormat.name -> {
+                        Result.Error(ResetPasswordError.InvalidRequestFormat)
+                    }
+                    ResetPasswordError.InvalidOTP.name -> {
+                        Result.Error(ResetPasswordError.InvalidOTP)
+                    }
+                    ResetPasswordError.ServerError.name -> {
+                        Result.Error(ResetPasswordError.ServerError)
+                    }
+                    ResetPasswordError.UnknownError.name -> {
+                        Result.Error(ResetPasswordError.UnknownError)
+                    }
+                    else -> {
+                        Result.Error(ResetPasswordError.UnknownError)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.d(AUTH_TAG, "ResetPassword: ${e.message}")
+            Result.Error(ResetPasswordError.UnknownError)
         }
     }
 }

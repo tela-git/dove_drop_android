@@ -2,7 +2,8 @@ package com.example.dovedrop.chat.presentation.ui.screens.auth.reset_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dovedrop.chat.data.network.dto.auth.FPResponseError
+import com.example.dovedrop.chat.data.model.auth.FPResponseError
+import com.example.dovedrop.chat.data.model.auth.ResetPasswordError
 import com.example.dovedrop.chat.domain.network.AuthRepository
 import com.example.dovedrop.chat.domain.util.Result
 import kotlinx.coroutines.channels.Channel
@@ -25,6 +26,9 @@ class ResetPasswordViewModel(
     private val _rpUIData = MutableStateFlow(RPUIData())
     val rpUiData = _rpUIData.asStateFlow()
 
+    private val _rpToastChannel = Channel<String>()
+    val rpToastFlow = _rpToastChannel.receiveAsFlow()
+
 
     fun sendOTPToEmail() {
         viewModelScope.launch {
@@ -43,7 +47,7 @@ class ResetPasswordViewModel(
                 is Result.Error -> {
                     _fpUIData.update { it.copy(isLoading = false, otpSent = false, email = "") }
                     when(response.error) {
-                        is FPResponseError.InvalidRequestFormat -> {
+                        FPResponseError.InvalidRequestFormat -> {
                             _fpToastChannel.send("Please enter valid data!")
                         }
                         FPResponseError.InvalidRequest -> {
@@ -61,8 +65,38 @@ class ResetPasswordViewModel(
         }
     }
 
-    fun updatePassword() {
-
+    fun updatePassword(email: String) {
+        viewModelScope.launch {
+            _rpUIData.update { it.copy(isLoading = true) }
+            val response = authRepository.resetPassword(
+                otp = rpUiData.value.otp,
+                email = email,
+                newPassword = rpUiData.value.passwordTwo
+            )
+            when(response) {
+                is Result.Success -> {
+                    _rpToastChannel.send("Password reset successful.")
+                    _rpUIData.update { state-> state.copy(isLoading = false, isPasswordResetSuccess = true) }
+                }
+                is Result.Error -> {
+                    _rpUIData.update { it.copy(isLoading = false, isPasswordResetSuccess = false) }
+                    when(response.error) {
+                        ResetPasswordError.InvalidOTP -> {
+                            _rpToastChannel.send("Invalid OTP!")
+                        }
+                        ResetPasswordError.InvalidRequestFormat -> {
+                            _rpToastChannel.send("Please enter data in a valid format!")
+                        }
+                        ResetPasswordError.ServerError -> {
+                            _rpToastChannel.send("OOPS! Please try after sometime")
+                        }
+                        ResetPasswordError.UnknownError -> {
+                            _rpToastChannel.send("Something went wrong, try again!")
+                        }
+                    }
+                }
+            }
+        }
     }
 
     //Functions for updating FP UI
@@ -126,5 +160,7 @@ data class RPUIData(
     val passwordTwo: String = "",
     val passwordOneVisibility: Boolean = false,
     val passwordTwoVisibility: Boolean = false,
-    val buttonEnabled: Boolean = false
+    val buttonEnabled: Boolean = false,
+    val isLoading: Boolean = false,
+    val isPasswordResetSuccess: Boolean = false
 )

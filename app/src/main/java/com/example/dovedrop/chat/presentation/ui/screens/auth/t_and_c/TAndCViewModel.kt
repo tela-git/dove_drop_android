@@ -3,7 +3,7 @@ package com.example.dovedrop.chat.presentation.ui.screens.auth.t_and_c
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dovedrop.chat.data.network.dto.auth.TermsAndConditionsResponse
+import com.example.dovedrop.chat.data.network.dto.auth.response.TermsAndConditionsResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestTimeoutException

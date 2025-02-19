@@ -1,4 +1,4 @@
-package com.example.dovedrop.chat.data.network.dto.auth
+package com.example.dovedrop.chat.data.network.dto.auth.response
 
 import kotlinx.serialization.Serializable
 

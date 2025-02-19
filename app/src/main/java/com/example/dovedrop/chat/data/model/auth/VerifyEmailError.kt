@@ -1,4 +1,4 @@
-package com.example.dovedrop.chat.data.model
+package com.example.dovedrop.chat.data.model.auth
 
 import com.example.dovedrop.chat.domain.util.Error
 

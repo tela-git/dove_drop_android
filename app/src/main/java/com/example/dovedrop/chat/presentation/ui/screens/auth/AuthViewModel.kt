@@ -3,11 +3,10 @@ package com.example.dovedrop.chat.presentation.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dovedrop.chat.data.model.VerifyEmailError
+import com.example.dovedrop.chat.data.model.auth.VerifyEmailError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginError
 import com.example.dovedrop.chat.data.network.dto.auth.LoginRequestData
-import com.example.dovedrop.chat.data.network.dto.auth.SignUpError
+import com.example.dovedrop.chat.data.model.auth.SignUpError
 import com.example.dovedrop.chat.data.network.dto.auth.SignUpRequestData
 import com.example.dovedrop.chat.data.repository.EncryptedPrefs
 import com.example.dovedrop.chat.domain.network.AuthRepository

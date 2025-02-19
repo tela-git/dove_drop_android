@@ -1,5 +1,6 @@
 package com.example.dovedrop.chat.presentation.ui.screens.auth.reset_password
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,11 +17,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,9 +35,25 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ResetPasswordScreen(
     modifier: Modifier = Modifier,
+    email: String,
+    onPasswordResetSuccess: () -> Unit,
 ) {
     val viewModel: ResetPasswordViewModel = koinViewModel()
     val rpUIData by viewModel.rpUiData.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.rpUiData.collect{state->
+            if(state.isPasswordResetSuccess) {
+                onPasswordResetSuccess()
+            }
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.rpToastFlow.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Scaffold(
         modifier = modifier
@@ -149,7 +168,7 @@ fun ResetPasswordScreen(
             ) {
                 LongButtonPrimary(
                     onClick = {
-
+                        viewModel.updatePassword(email)
                     },
                     text = "Update Password",
                     isEnabled = rpUIData.buttonEnabled
