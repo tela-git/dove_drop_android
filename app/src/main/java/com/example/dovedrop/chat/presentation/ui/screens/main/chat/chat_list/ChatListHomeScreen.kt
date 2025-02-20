@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,6 +38,10 @@ fun ChatListHomeScreen(
     val chatViewModel : ChatViewModel = koinViewModel()
     val chatHomeUIState by chatViewModel.chatHomeUIState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        chatViewModel.getAllChatRooms()
+    }
+
     Scaffold(
         topBar = {
             ChatsHomeTopBar(
@@ -51,34 +58,35 @@ fun ChatListHomeScreen(
             )
         }
     ) { innerPadding->
-
-        Column(
+        DropdownMenu(
+            expanded = chatHomeUIState.isMoreOptionsVisibility,
+            onDismissRequest = chatViewModel::updateMoreOptionsVisibility,
+            offset = DpOffset(x = 800.dp, y = 64.dp)
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = "Settings"
+                    )
+                },
+                onClick = {
+                    onMoreOptionsClick()
+                    chatViewModel.updateMoreOptionsVisibility()
+                }
+            )
+        }
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            DropdownMenu(
-                expanded = chatHomeUIState.isMoreOptionsVisibility,
-                onDismissRequest = chatViewModel::updateMoreOptionsVisibility,
-                offset = DpOffset(x = 800.dp, y = 64.dp)
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = "Settings"
-                        )
-                    },
-                    onClick = {
-                        onMoreOptionsClick()
-                        chatViewModel.updateMoreOptionsVisibility()
-                    }
-                )
+            items(
+                items = chatHomeUIState.chatRooms ?: emptyList(),
+                key = { it.id }
+            ) {chatRoomDetails->
+                ChatRoomCard(chatRoomDetails)
             }
-            Text(
-                text = "You are logged in. \n This is home screen"
-            )
         }
 
     }
