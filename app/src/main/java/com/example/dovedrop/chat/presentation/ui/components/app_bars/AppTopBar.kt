@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ fun ChatsHomeTopBar(
     modifier: Modifier = Modifier,
     onMoreOptionsClick: () -> Unit,
     isNavigateBackIconVisible: Boolean,
+    onRefresh: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -41,6 +43,14 @@ fun ChatsHomeTopBar(
                     imageVector = Icons.Outlined.MoreVert,
                     contentDescription = "More options",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+            IconButton(
+                onClick = onRefresh
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = ""
                 )
             }
         },

@@ -1,14 +1,19 @@
 package com.example.dovedrop.chat.data.di
 
 import com.example.dovedrop.chat.data.repository.AuthRepositoryImpl
+import com.example.dovedrop.chat.data.repository.ChatRepositoryImpl
+import com.example.dovedrop.chat.data.repository.ContactRepositoryImpl
 import com.example.dovedrop.chat.data.repository.EncryptedPrefs
 import com.example.dovedrop.chat.domain.network.AuthRepository
+import com.example.dovedrop.chat.domain.network.ChatRepository
+import com.example.dovedrop.chat.domain.network.ContactRepository
 import com.example.dovedrop.chat.presentation.ui.components.otp.OtpViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.AppViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.reset_password.ResetPasswordViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.t_and_c.TAndCViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.main.chat.ChatViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
+import com.example.dovedrop.chat.presentation.ui.screens.main.contacts.ContactsViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -20,7 +25,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-private const val baseUrl = "http://10.0.2.2:8080"
+private const val baseUrl = "https://dovedrop-app-6-d3690849cac2.herokuapp.com/"
 
 val appModule = module {
 
@@ -39,8 +44,10 @@ val appModule = module {
             }
         }
     }
-    single { EncryptedPrefs(androidContext()) }
+    single<EncryptedPrefs> { EncryptedPrefs(androidContext()) }
     single<AuthRepository> {AuthRepositoryImpl(get())}
+    single<ChatRepository> {ChatRepositoryImpl(get(), get())}
+    single<ContactRepository> { ContactRepositoryImpl(get(), get()) }
 
     viewModelOf(::AuthViewModel)
     viewModelOf(::ResetPasswordViewModel)
@@ -48,5 +55,6 @@ val appModule = module {
     viewModelOf(::ChatViewModel)
     viewModelOf(::AppViewModel)
     viewModelOf(::TAndCViewModel)
+    viewModelOf(::ContactsViewModel)
 
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -39,7 +40,8 @@ fun EmailInputField(
     onValueChange: (String) -> Unit,
     enabled: Boolean = true,
     isError: Boolean,
-    imeAction: ImeAction = ImeAction.Next
+    imeAction: ImeAction = ImeAction.Next,
+    placeholderText: String = "Enter your email address"
 ) {
     val isVerified = emailRegex.matches(value)
     Column(
@@ -58,7 +60,7 @@ fun EmailInputField(
             enabled = enabled,
             placeholder = {
                 Text(
-                    text = "Enter your email address",
+                    text = placeholderText,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
                     )

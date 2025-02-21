@@ -1,11 +1,10 @@
 package com.example.dovedrop.chat.presentation.ui.screens.main.chat.chat_list
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -15,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,15 +29,18 @@ import com.example.dovedrop.chat.data.model.chat.ChatRoomType
 import com.example.dovedrop.chat.data.model.chat.MessageStatus
 import com.example.dovedrop.chat.presentation.theme.DoveDropTheme
 import com.example.dovedrop.chat.utils.getReadableDate
-import java.util.Date
 
 @Composable
-fun ChatRoomCard(chatRoom: ChatRoom) {
+fun ChatRoomCard(
+    chatRoom: ChatRoom,
+    onClick: () -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
             //.height(68.dp)
+            .clickable { onClick() }
                 ,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -74,7 +75,7 @@ fun ChatRoomCard(chatRoom: ChatRoom) {
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = getReadableDate(chatRoom.lastMessage?.timestamp),
+                    text = getReadableDate(chatRoom.lastMessage?.timeStamp),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -91,14 +92,14 @@ fun ChatRoomCard(chatRoom: ChatRoom) {
 val dummyChatRoom = ChatRoom(
     id = "chatRoomThree",
     participants = listOf("umesh1234@gmail.com", "madhavexample@gmail.com"),
-    type = ChatRoomType.Private,
+    chatRoomType = ChatRoomType.Private.name,
     createdAt = 1739440064019L,
     lastMessage = ChatMessage(
         id = "messageThree",
         sender = "umesh1234@gmail.com",
         text = "Welcome to the group! slkfjls f slfkjl lskdjf sfs sdfs sddf",
-        timestamp = 1739947384000L,
-        status = MessageStatus.Undelivered,
+        timeStamp = 1739947384000L,
+        status = MessageStatus.Undelivered.name,
         chatRoomId = "chatRoomThree"
     ),
     participant2Name = "Madhav",
@@ -110,7 +111,8 @@ val dummyChatRoom = ChatRoom(
 private fun ChatRoomCardPreview() {
     DoveDropTheme {
         ChatRoomCard(
-            chatRoom = dummyChatRoom
+            chatRoom = dummyChatRoom,
+            onClick = { }
         )
     }
 }

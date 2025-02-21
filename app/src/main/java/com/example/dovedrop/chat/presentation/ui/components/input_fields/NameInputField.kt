@@ -31,7 +31,8 @@ fun NameInputField(
     name: String,
     onNameChange: (String) -> Unit,
     imeAction: ImeAction = ImeAction.Next,
-    modifier: Modifier
+    modifier: Modifier,
+    placeHolderText: String = "Enter your name"
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -70,7 +71,7 @@ fun NameInputField(
             },
             placeholder = {
                 Text(
-                    text = "Enter your name",
+                    text = placeHolderText,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
                     )
