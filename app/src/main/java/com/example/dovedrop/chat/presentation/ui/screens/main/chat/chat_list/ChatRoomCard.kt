@@ -38,9 +38,9 @@ fun ChatRoomCard(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(12.dp)
             //.height(68.dp)
-            .clickable { onClick() }
                 ,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)

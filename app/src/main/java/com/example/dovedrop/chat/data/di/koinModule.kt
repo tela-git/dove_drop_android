@@ -14,6 +14,7 @@ import com.example.dovedrop.chat.presentation.ui.screens.auth.t_and_c.TAndCViewM
 import com.example.dovedrop.chat.presentation.ui.screens.main.chat.ChatViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.auth.AuthViewModel
 import com.example.dovedrop.chat.presentation.ui.screens.main.contacts.ContactsViewModel
+import com.example.dovedrop.chat.presentation.ui.screens.main.chat.chat_detail.ChatRoomViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -56,5 +57,6 @@ val appModule = module {
     viewModelOf(::AppViewModel)
     viewModelOf(::TAndCViewModel)
     viewModelOf(::ContactsViewModel)
+    viewModelOf(::ChatRoomViewModel)
 
 }

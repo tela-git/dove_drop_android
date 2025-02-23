@@ -52,6 +52,7 @@ class ContactRepositoryImpl(
                 }
             }
        } catch (e: Exception) {
+           Log.d("AuthTag", "Error getting all contacts: ${e.message}")
            Result.Error(GetContactsError.UNKNOWN_ERROR)
         }
     }

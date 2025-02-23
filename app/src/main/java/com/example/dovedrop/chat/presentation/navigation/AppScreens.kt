@@ -16,6 +16,11 @@ sealed class AppNavGraph {
 
     @Serializable data object MainNavGraph: AppNavGraph() {
         @Serializable data object Home : AppNavGraph()
+        @Serializable data class ChatRoom(
+            val id: String,
+            val p2Name: String,
+            val p2Dp: String
+        ) : AppNavGraph()
         @Serializable data object Calls: AppNavGraph()
         @Serializable data object SettingsHome: AppNavGraph()
         @Serializable data object AddChatRoom: AppNavGraph()

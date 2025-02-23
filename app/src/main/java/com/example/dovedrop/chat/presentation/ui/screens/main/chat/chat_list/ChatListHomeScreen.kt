@@ -47,6 +47,7 @@ fun ChatListHomeScreen(
     onBottomBarIconClick: (AppNavGraph) -> Unit,
     onMoreOptionsClick: () -> Unit,
     onAddChatRoomClick: () -> Unit,
+    onChatRoomClick: (id: String, p2Name: String, p2Dp: String) -> Unit
 ) {
     val chatViewModel : ChatViewModel = koinViewModel()
     val chatHomeUIState by chatViewModel.chatHomeUIState.collectAsState()
@@ -116,7 +117,13 @@ fun ChatListHomeScreen(
             ) {chatRoomDetails->
                 ChatRoomCard(
                     chatRoom = chatRoomDetails,
-                    onClick = { }
+                    onClick = {
+                        onChatRoomClick(
+                            chatRoomDetails.id,
+                            chatRoomDetails.participant2Name,
+                            chatRoomDetails.participant2Dp,
+                        )
+                    }
                 )
             }
         }
