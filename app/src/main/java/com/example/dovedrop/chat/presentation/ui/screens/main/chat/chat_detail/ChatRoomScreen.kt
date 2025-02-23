@@ -181,18 +181,20 @@ private fun MessageCard(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .align(Alignment.End),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = getReadableDateTwo(message.timeStamp),
                         style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 8.sp
                         )
                     )
                     Text(
                         text = getDateAndTime(message.timeStamp).second,
                         style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 8.sp
                         )
                     )
                     when (message.status) {
@@ -201,7 +203,7 @@ private fun MessageCard(
                                 imageVector = ImageVector.vectorResource(R.drawable.one_tick),
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .size(20.dp),
+                                    .size(18.dp),
                                 tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(
                                     alpha = 0.4f
                                 )
@@ -213,7 +215,7 @@ private fun MessageCard(
                                 imageVector = ImageVector.vectorResource(R.drawable.read_tick),
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .size(20.dp),
+                                    .size(18.dp),
                                 tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(
                                     alpha = 0.4f
                                 )
@@ -225,7 +227,7 @@ private fun MessageCard(
                                 imageVector = ImageVector.vectorResource(R.drawable.read_tick),
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .size(20.dp),
+                                    .size(18.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }

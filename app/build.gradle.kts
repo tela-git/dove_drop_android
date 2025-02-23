@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.ktor.slf4j)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.websockets)
+
 
     // Icons
     implementation(libs.androidx.material.icons.extended)
@@ -112,7 +114,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // EncryptedPrefs
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation(libs.androidx.security.crypto)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

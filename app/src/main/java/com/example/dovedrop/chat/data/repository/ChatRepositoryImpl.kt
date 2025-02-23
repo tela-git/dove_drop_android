@@ -17,7 +17,6 @@ class ChatRepositoryImpl(
     private val encryptedPrefs: EncryptedPrefs
 ): ChatRepository {
     override suspend fun getAllChatRooms() : Result<List<ChatRoom>?, GetAllChatsError> {
-
         return try {
             val response = httpClient
                 .get("/user/getAllChatRooms") {
@@ -47,4 +46,6 @@ class ChatRepositoryImpl(
             Result.Error(GetAllChatsError.UNKNOWN_ERROR)
         }
     }
+
+
 }
