@@ -1,6 +1,7 @@
 package com.example.dovedrop.chat.data.repository
 
 import android.util.Log
+import com.example.dovedrop.chat.data.di.baseUrl
 import com.example.dovedrop.chat.data.model.auth.VerifyEmailError
 import com.example.dovedrop.chat.data.network.dto.auth.response.AuthResponse
 import com.example.dovedrop.chat.data.model.auth.FPResponseError
@@ -30,7 +31,7 @@ class AuthRepositoryImpl(
         loginRequest: LoginRequestData
     ):  Result<String, LoginError> {
         try {
-            val apiResponse = httpClient.post("/auth/login") {
+            val apiResponse = httpClient.post("$baseUrl/auth/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequest)
             }
@@ -70,7 +71,7 @@ class AuthRepositoryImpl(
         signUpRequest: SignUpRequestData
     ):  Result<String?, SignUpError> {
         try {
-            val response = httpClient.post("/auth/signup") {
+            val response = httpClient.post("$baseUrl/auth/signup") {
                 contentType(ContentType.Application.Json)
                 setBody(signUpRequest)
             }
@@ -106,7 +107,7 @@ class AuthRepositoryImpl(
     override suspend fun emailVerify(email: String, otp: String): Result<String, VerifyEmailError> {
         try {
             val response = httpClient
-                .post("/auth/verify-email") {
+                .post("$httpClient/auth/verify-email") {
                     contentType(ContentType.Application.Json)
                     setBody(
                         mapOf(
@@ -151,7 +152,7 @@ class AuthRepositoryImpl(
     override suspend fun sendOTPToUserEmail(email: String): Result<String, FPResponseError> {
         return try {
             val response = httpClient
-                .get(urlString = "/auth/forgot-password") {
+                .get(urlString = "$httpClient/auth/forgot-password") {
                     url {
                         parameters.append("email", email)
                     }
@@ -190,7 +191,7 @@ class AuthRepositoryImpl(
     ): Result<String, ResetPasswordError> {
         return try {
             val response = httpClient
-                .post("/auth/reset-password") {
+                .post("$httpClient/auth/reset-password") {
                     contentType(ContentType.Application.Json)
                     setBody(
                         mapOf(

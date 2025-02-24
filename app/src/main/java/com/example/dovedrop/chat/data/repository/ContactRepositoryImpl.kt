@@ -1,6 +1,7 @@
 package com.example.dovedrop.chat.data.repository
 
 import android.util.Log
+import com.example.dovedrop.chat.data.di.baseUrl
 import com.example.dovedrop.chat.data.model.user.AddContactError
 import com.example.dovedrop.chat.data.model.user.ContactDTO
 import com.example.dovedrop.chat.data.model.user.GetContactsError
@@ -27,7 +28,7 @@ class ContactRepositoryImpl(
         Log.d("AuthTag", "getAllContacts() in repo called")
        return try {
             val response = httpClient
-                .get("/user/getAllContacts") {
+                .get("$baseUrl/user/getAllContacts") {
                     url {
                         header(HttpHeaders.Authorization, "Bearer " + encryptedPrefs.getToken())
                     }
@@ -60,7 +61,7 @@ class ContactRepositoryImpl(
     override suspend fun addContact(name: String, email: String): Result<ContactDTO?, AddContactError> {
         return try {
             val response = httpClient
-                .post("/user/addContact") {
+                .post("$httpClient/user/addContact") {
                     header(HttpHeaders.Authorization, "Bearer " + encryptedPrefs.getToken())
                     contentType(ContentType.Application.Json)
                     setBody(

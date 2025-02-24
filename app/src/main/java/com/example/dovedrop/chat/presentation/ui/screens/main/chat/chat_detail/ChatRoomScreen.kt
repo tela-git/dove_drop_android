@@ -104,7 +104,7 @@ fun ChatRoomScreen(
                 message = uiState.text,
                 onValueChange = chatRoomViewModel::updateInputMessage,
                 modifier = Modifier,
-                onSendClick = { }
+                onSendClick = { chatRoomViewModel.onSend(roomId) }
             )
         }
     ) { innerPadding->
@@ -284,7 +284,7 @@ private fun ChatRoomBottomBar(
                 imeAction = ImeAction.Send
             ),
             keyboardActions = KeyboardActions(
-                onSearch = { onSendClick() }
+                onSend = { onSendClick() }
             ),
             decorationBox = { innerTextField ->
                 Box(
@@ -319,7 +319,7 @@ private fun ChatRoomBottomBar(
         }
         AnimatedVisibility(message.isNotBlank()) {
             IconButton(
-              onClick = { }
+              onClick = onSendClick
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.Send,
