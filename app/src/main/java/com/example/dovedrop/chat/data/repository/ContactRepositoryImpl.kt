@@ -12,10 +12,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
@@ -61,7 +59,7 @@ class ContactRepositoryImpl(
     override suspend fun addContact(name: String, email: String): Result<ContactDTO?, AddContactError> {
         return try {
             val response = httpClient
-                .post("$httpClient/user/addContact") {
+                .post("$baseUrl/user/addContact") {
                     header(HttpHeaders.Authorization, "Bearer " + encryptedPrefs.getToken())
                     contentType(ContentType.Application.Json)
                     setBody(

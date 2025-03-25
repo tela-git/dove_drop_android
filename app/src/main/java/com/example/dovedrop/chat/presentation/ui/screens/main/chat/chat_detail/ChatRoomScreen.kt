@@ -1,5 +1,6 @@
 package com.example.dovedrop.chat.presentation.ui.screens.main.chat.chat_detail
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,6 +47,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,12 +75,12 @@ import com.example.dovedrop.R
 import com.example.dovedrop.chat.data.dummy_data.dummyMessages
 import com.example.dovedrop.chat.data.model.chat.ChatMessage
 import com.example.dovedrop.chat.data.model.chat.MessageStatus
+import com.example.dovedrop.chat.presentation.ui.components.loading.LoadingPage
 import com.example.dovedrop.chat.utils.getDateAndTime
 import com.example.dovedrop.chat.utils.getReadableDate
 import com.example.dovedrop.chat.utils.getReadableDateTwo
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatRoomScreen(
     roomId: String,
@@ -89,6 +91,10 @@ fun ChatRoomScreen(
     val chatRoomViewModel: ChatRoomViewModel = koinViewModel()
     val uiState by chatRoomViewModel.uiState.collectAsStateWithLifecycle()
     var selectionEnabled by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        chatRoomViewModel.getAllMessages(roomId)
+    }
 
     Scaffold(
         topBar = {
@@ -112,10 +118,10 @@ fun ChatRoomScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            reverseLayout = true
         ) {
+            Log.d("AuthTag", "Messages List: ${uiState.chatMessages}")
             items(
-                items = dummyMessages,
+                items = uiState.chatMessages,
                 key = { it.id }
             ) { message->
                 MessageCard(
@@ -125,6 +131,9 @@ fun ChatRoomScreen(
                     onEnableSelection = { selectionEnabled = true }
                 )
             }
+        }
+        if(uiState.isLoading) {
+            LoadingPage()
         }
     }
 }
